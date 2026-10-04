@@ -1,0 +1,17 @@
+# Render Blueprint. Render looks for render.yaml at the repo root by default;
+# either copy it there or point the Blueprint at deploy/render.yaml in the dashboard.
+services:
+  - type: web
+    name: yaaddost
+    runtime: python
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn app.main:app --app-dir backend --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      # Public URL of your Gemma server (the Colab tunnel). Leave unset to run in offline mode.
+      - key: OLLAMA_URL
+        sync: false
+      - key: GEMMA_MODEL
+        value: gemma4:e4b
