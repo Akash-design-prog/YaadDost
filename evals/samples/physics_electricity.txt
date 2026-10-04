@@ -1,0 +1,6 @@
+Ohm's law: the current through a conductor is directly proportional to the voltage across it, V = I x R, if the temperature stays constant.
+Resistors in series: the total resistance is the sum of the individual resistances, R = R1 + R2 + R3.
+Resistors in parallel: the reciprocal of the total resistance is the sum of the reciprocals, 1/R = 1/R1 + 1/R2.
+Electric power is P = V x I. The SI unit of power is the watt.
+One kilowatt-hour is the energy used by a 1000 W appliance running for one hour.
+Kirchhoff's current law: the total current entering a junction equals the total current leaving it.

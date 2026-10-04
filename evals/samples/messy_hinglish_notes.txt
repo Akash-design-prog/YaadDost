@@ -1,0 +1,7 @@
+tcp vs udp - tcp reliable hota hai, handshake karta hai (3 way: syn, syn-ack, ack). udp fast hai but delivery ki guarantee nahi
+tcp me flow control + congestion control hota hai. udp me nahi
+dns: domain name ko ip address me convert karta hai. port 53
+http port 80, https port 443 (tls encryption ke saath)
+osi model 7 layers: physical, data link, network, transport, session, presentation, application
+router network layer pe kaam karta hai, switch data link layer pe
+ip address 32 bit ka hota hai ipv4 me, ipv6 me 128 bit

@@ -1,0 +1,7 @@
+Deadlock: a situation where two or more processes wait forever for resources held by each other.
+Four conditions for deadlock: mutual exclusion, hold and wait, no preemption, and circular wait. All four must hold together.
+Banker's algorithm avoids deadlock by granting a request only if the system stays in a safe state.
+A safe state means there is an order in which every process can finish with the resources available.
+Paging divides memory into fixed-size blocks, which removes external fragmentation.
+Thrashing happens when a system spends more time swapping pages than executing instructions.
+Round robin scheduling gives each process a fixed time quantum and moves it to the back of the queue.
