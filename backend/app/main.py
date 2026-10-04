@@ -14,6 +14,12 @@ for module in (status, cards, explain, review):
     app.include_router(module.router, prefix="/api")
 
 
+@app.get("/healthz")
+def healthz():
+    # Cheap liveness check for Render; does not touch Gemma.
+    return {"ok": True}
+
+
 @app.get("/")
 def index():
     return FileResponse(FRONTEND / "index.html")
