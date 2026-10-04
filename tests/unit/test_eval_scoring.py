@@ -26,13 +26,23 @@ def test_hinglish_share():
     assert hinglish_share("") == 0.0
 
 
-def test_score_cards_flags_problems():
-    cards = [
-        {"q": "What is deadlock?", "a": "mutual exclusion and circular wait"},
-        {"q": "what is Deadlock", "a": "uses semaphores to schedule quantum threads"},
-    ]
-    s = score_cards(cards, NOTES, "hinglish")
-    assert s["cards"] == 2 and s["duplicates"] == 1 and s["ungrounded"] == 1 and s["hinglish_cards"] == 0
+CARDS = [
+    {"q": "What is deadlock?", "a": "mutual exclusion and circular wait"},
+    {"q": "what is Deadlock", "a": "uses semaphores to schedule quantum threads"},
+]
+
+
+def test_score_cards_flags_problems_in_english():
+    s = score_cards(CARDS, NOTES, "english")
+    assert s["cards"] == 2 and s["duplicates"] == 1 and s["ungrounded"] == 1
+    assert s["hinglish_cards"] is None
+
+
+def test_hinglish_skips_word_overlap_but_still_counts_duplicates():
+    # translated answers can't be checked by word overlap, so the field is None, not a false alarm
+    s = score_cards(CARDS, NOTES, "hinglish")
+    assert s["ungrounded"] is None and s["mean_groundedness"] is None
+    assert s["duplicates"] == 1 and s["hinglish_cards"] == 0
 
 
 def test_score_cards_empty():

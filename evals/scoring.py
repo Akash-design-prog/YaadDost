@@ -37,13 +37,20 @@ def score_cards(cards: list[dict], notes: str, language: str) -> dict:
     n = len(cards)
     if n == 0:
         return {"cards": 0, "ungrounded": 0, "duplicates": 0, "mean_groundedness": 0.0, "hinglish_cards": 0}
-    g = [groundedness(c["a"], notes) for c in cards]
     questions = [re.sub(r"\W+", " ", c["q"].lower()).strip() for c in cards]
+    # Word overlap only works when cards and notes share a language. A Hinglish card that
+    # faithfully translates English notes scores low ("organize karna" vs "organising"), so for
+    # Hinglish these two fields are None and the Verifier agent (A1) judges grounding instead.
+    if language == "english":
+        g = [groundedness(c["a"], notes) for c in cards]
+        ungrounded, mean_g = sum(x < GROUNDED_MIN for x in g), round(sum(g) / n, 3)
+    else:
+        ungrounded, mean_g = None, None
     return {
         "cards": n,
-        "ungrounded": sum(x < GROUNDED_MIN for x in g),
+        "ungrounded": ungrounded,
         "duplicates": n - len(set(questions)),
-        "mean_groundedness": round(sum(g) / n, 3),
+        "mean_groundedness": mean_g,
         # in hinglish mode, how many cards actually contain Hindi words
         "hinglish_cards": sum(hinglish_share(c["q"] + " " + c["a"]) > 0 for c in cards) if language == "hinglish" else None,
     }
