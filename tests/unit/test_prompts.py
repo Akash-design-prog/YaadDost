@@ -29,3 +29,8 @@ def test_language_style_is_applied():
 def test_explain_messages_include_concept_and_notes():
     m = prompts.explain_messages("deadlock", NOTES, "hinglish")
     assert "deadlock" in m[1]["content"] and NOTES in m[1]["content"] and "Hinglish" in m[0]["content"]
+
+
+def test_latex_is_forbidden_in_cards_and_explanations():
+    assert "no LaTeX" in system_text("english")
+    assert "no LaTeX" in prompts.explain_messages("x", "", "english")[0]["content"]

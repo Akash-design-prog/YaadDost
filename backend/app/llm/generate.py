@@ -1,8 +1,19 @@
 """What the app asks Gemma to do: make cards, explain a concept."""
 import json
+import re
 
 from . import client, prompts
 from .client import LLMUnavailable
+
+_CONTROL = re.compile(r"[\x00-\x08\x0b-\x1f]")
+
+
+def clean_text(s: str) -> str:
+    """Undo LaTeX habits: Gemma sometimes writes \\times inside JSON, which decodes to TAB + 'imes'."""
+    s = s.replace("\t" + "imes", "×").replace("\t", " ")
+    s = s.replace("$", "")
+    s = _CONTROL.sub("", s)
+    return re.sub(r" {2,}", " ", s).strip()
 
 
 async def make_cards(notes: str, count: int, language: str) -> list[dict]:
@@ -13,9 +24,9 @@ async def make_cards(notes: str, count: int, language: str) -> list[dict]:
         try:
             cards = json.loads(raw)["cards"]
             cleaned = [
-                {"q": str(c["q"]).strip(), "a": str(c["a"]).strip()}
+                {"q": clean_text(str(c["q"])), "a": clean_text(str(c["a"]))}
                 for c in cards
-                if str(c.get("q", "")).strip() and str(c.get("a", "")).strip()
+                if clean_text(str(c.get("q", ""))) and clean_text(str(c.get("a", "")))
             ]
             if cleaned:
                 return cleaned[:count]
@@ -25,4 +36,5 @@ async def make_cards(notes: str, count: int, language: str) -> list[dict]:
 
 
 async def explain(concept: str, notes: str, language: str) -> str:
-    return (await client.chat(prompts.explain_messages(concept, notes, language))).strip()
+    raw = await client.chat(prompts.explain_messages(concept, notes, language))
+    return "\n".join(clean_text(line) for line in raw.splitlines()).strip()
