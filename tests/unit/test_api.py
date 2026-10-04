@@ -2,6 +2,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.core import config
+from app.agents import pipeline
 from app.llm import generate
 from app.llm.client import LLMUnavailable
 from app.main import app
@@ -37,16 +38,21 @@ def test_cards_validation():
 def test_cards_falls_back_when_gemma_down(monkeypatch):
     gemma_down(monkeypatch, "make_cards")
     r = client.post("/api/cards", json={"notes": NOTES, "count": 5})
-    assert r.status_code == 200 and r.json()["source"] == "fallback" and r.json()["cards"]
+    body = r.json()
+    assert r.status_code == 200 and body["source"] == "fallback" and body["cards"]
+    assert body["verified"] is False and body["dropped"] == []
 
 
-def test_cards_uses_gemma_when_available(monkeypatch):
+def test_cards_returns_verified_cards_and_what_was_dropped(monkeypatch):
     async def ok(notes, count, language):
-        return [{"q": "Q?", "a": "A"}]
+        return {"cards": [{"q": "Q?", "a": "A", "checked": True}],
+                "dropped": [{"q": "Bad?", "a": "X", "reason": "not in notes"}],
+                "verified": True, "trace": [{"step": "generate"}]}
 
-    monkeypatch.setattr(generate, "make_cards", ok)
-    r = client.post("/api/cards", json={"notes": NOTES})
-    assert r.json()["source"] == "gemma" and r.json()["cards"] == [{"q": "Q?", "a": "A"}]
+    monkeypatch.setattr(pipeline, "make_verified_cards", ok)
+    body = client.post("/api/cards", json={"notes": NOTES}).json()
+    assert body["source"] == "gemma" and body["verified"] is True
+    assert body["cards"][0]["q"] == "Q?" and body["dropped"][0]["reason"] == "not in notes"
 
 
 def test_explain_503_when_gemma_down(monkeypatch):
@@ -59,6 +65,11 @@ def test_status_reports_unavailable_when_unreachable(monkeypatch):
     monkeypatch.setattr(config, "OLLAMA_URL", "http://127.0.0.1:9")
     r = client.get("/api/status")
     assert r.status_code == 200 and r.json()["available"] is False
+
+
+def test_healthz_does_not_need_gemma(monkeypatch):
+    monkeypatch.setattr(config, "OLLAMA_URL", "http://127.0.0.1:9")
+    assert client.get("/healthz").json() == {"ok": True}
 
 
 def test_frontend_files_served():

@@ -52,3 +52,39 @@ def explain_messages(concept: str, notes: str, language: str) -> list[dict]:
     )
     user = f"Concept: {concept}\n\nStudent's notes (may be empty):\n{notes}"
     return [{"role": "system", "content": system}, {"role": "user", "content": user}]
+
+
+VERDICTS_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "verdicts": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {"type": "integer"},
+                    "supported": {"type": "boolean"},
+                    "reason": {"type": "string"},
+                },
+                "required": ["id", "supported", "reason"],
+            },
+        }
+    },
+    "required": ["verdicts"],
+}
+
+
+def verify_messages(notes: str, cards: list[dict]) -> list[dict]:
+    system = (
+        "You are a strict fact-checker for student flashcards. For each numbered card, decide whether "
+        "its ANSWER is fully supported by the NOTES.\n"
+        "- supported = true only if every claim in the answer is stated in, or directly follows from, the notes. "
+        "The answer may be a translation or paraphrase (for example Hinglish), so differences in language or wording do not matter.\n"
+        "- supported = false if the answer contains a claim that is not in the notes (even if it is true in "
+        "the real world), if it contradicts the notes, or if the question cannot be answered from the notes.\n"
+        "Give a short reason in English. Plain text only. "
+        'Reply as JSON: {"verdicts": [{"id": 1, "supported": true, "reason": "..."}]} with one verdict per card.'
+    )
+    numbered = "\n".join(f"{i}. Q: {c['q']}\n   A: {c['a']}" for i, c in enumerate(cards, 1))
+    user = f"NOTES:\n{notes}\n\nCARDS:\n{numbered}"
+    return [{"role": "system", "content": system}, {"role": "user", "content": user}]
