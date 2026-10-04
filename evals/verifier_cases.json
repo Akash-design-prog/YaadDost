@@ -1,0 +1,17 @@
+{
+  "notes": "Deadlock: a situation where two or more processes wait forever for resources held by each other.\nFour conditions for deadlock: mutual exclusion, hold and wait, no preemption, and circular wait. All four must hold together.\nBanker's algorithm avoids deadlock by granting a request only if the system stays in a safe state.\nPaging divides memory into fixed-size blocks, which removes external fragmentation.\nThrashing happens when a system spends more time swapping pages than executing instructions.\nHTTP uses port 80 and HTTPS uses port 443.\ntcp reliable hota hai, handshake karta hai. udp fast hai but delivery ki guarantee nahi.",
+  "cases": [
+    {"q": "What is a deadlock?", "a": "Processes wait forever for resources held by each other.", "supported": true, "why": "verbatim"},
+    {"q": "How many conditions must hold for deadlock?", "a": "All four conditions must hold together.", "supported": true, "why": "paraphrase"},
+    {"q": "How does the Banker's algorithm avoid deadlock?", "a": "Yeh request tabhi grant karta hai jab system safe state mein rehta hai.", "supported": true, "why": "Hinglish translation of notes"},
+    {"q": "TCP aur UDP mein delivery ki guarantee kiski hoti hai?", "a": "TCP reliable hai, UDP mein delivery ki guarantee nahi hoti.", "supported": true, "why": "Hinglish from Hinglish notes"},
+    {"q": "Which port does HTTPS use?", "a": "Port 443.", "supported": true, "why": "short factual"},
+    {"q": "What does paging remove?", "a": "External fragmentation.", "supported": true, "why": "short"},
+    {"q": "Which port does HTTPS use?", "a": "Port 8080.", "supported": false, "why": "wrong number"},
+    {"q": "How many conditions are needed for deadlock?", "a": "Any one of the four conditions is enough.", "supported": false, "why": "contradicts notes"},
+    {"q": "Who invented the Banker's algorithm?", "a": "Edsger Dijkstra.", "supported": false, "why": "true in the real world but not in the notes"},
+    {"q": "What causes thrashing?", "a": "Too many processes running on a single CPU core.", "supported": false, "why": "invented explanation"},
+    {"q": "What does paging cause?", "a": "Paging creates external fragmentation.", "supported": false, "why": "reversed meaning"},
+    {"q": "What is the time quantum in round robin?", "a": "A fixed slice of CPU time per process.", "supported": false, "why": "topic not in the notes"}
+  ]
+}

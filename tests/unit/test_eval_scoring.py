@@ -47,3 +47,13 @@ def test_hinglish_skips_word_overlap_but_still_counts_duplicates():
 
 def test_score_cards_empty():
     assert score_cards([], NOTES, "english")["cards"] == 0
+
+
+def test_verifier_cases_file_is_well_formed():
+    import json
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parents[2] / "evals" / "verifier_cases.json"
+    cases = json.loads(path.read_text(encoding="utf-8"))["cases"]
+    assert len(cases) >= 10 and all({"q", "a", "supported", "why"} <= set(c) for c in cases)
+    assert any(c["supported"] for c in cases) and any(not c["supported"] for c in cases)
