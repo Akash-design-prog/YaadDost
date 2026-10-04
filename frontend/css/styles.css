@@ -1,0 +1,28 @@
+:root { --bg:#faf8f4; --card:#fff; --ink:#1f2328; --mute:#667085; --line:#e4dfd5; --accent:#c2410c; --ok:#15803d; --warn:#b45309; }
+@media (prefers-color-scheme: dark) { :root { --bg:#16140f; --card:#211e17; --ink:#f1ece2; --mute:#a39b8b; --line:#3a352a; --accent:#fb923c; --ok:#4ade80; --warn:#fbbf24; } }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 720px; margin: 0 auto; padding: 24px 16px 64px; }
+header { display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; }
+h1 { margin:0; font-size:1.6rem; }
+h1 span { color:var(--accent); }
+.tag { color:var(--mute); margin:4px 0 20px; }
+.badge { font-size:.8rem; padding:3px 10px; border-radius:99px; border:1px solid var(--line); color:var(--mute); }
+.badge.ok { color:var(--ok); border-color:var(--ok); }
+.badge.off { color:var(--warn); border-color:var(--warn); }
+section { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:16px; }
+h2 { margin:0 0 10px; font-size:1.05rem; }
+textarea, input[type=text] { width:100%; padding:10px; border:1px solid var(--line); border-radius:8px; background:var(--bg); color:var(--ink); font:inherit; }
+textarea { min-height:150px; resize:vertical; }
+.row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:10px; }
+button { font:inherit; padding:9px 16px; border-radius:8px; border:1px solid var(--line); background:var(--card); color:var(--ink); cursor:pointer; }
+button.primary { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600; }
+button:disabled { opacity:.5; cursor:wait; }
+select { font:inherit; padding:8px; border-radius:8px; border:1px solid var(--line); background:var(--bg); color:var(--ink); }
+.flash { min-height:140px; display:flex; flex-direction:column; justify-content:center; text-align:center; font-size:1.15rem; padding:10px; }
+.ans { color:var(--ok); margin-top:12px; }
+.grades button { flex:1; min-width:70px; }
+.note { color:var(--mute); font-size:.88rem; }
+.warn { color:var(--warn); }
+pre { white-space:pre-wrap; font:inherit; margin:0; }
+[hidden] { display:none !important; }

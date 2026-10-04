@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>YaadDost</title>
+<link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+<main>
+  <header>
+    <h1>Yaad<span>Dost</span></h1>
+    <span id="badge" class="badge">checking Gemma…</span>
+  </header>
+  <p class="tag">Paste your notes. Get flashcards. Revise just before you'd forget. Your notes only ever reach your own open-weight Gemma.</p>
+
+  <section>
+    <h2>1. Your notes</h2>
+    <textarea id="notes" placeholder="Paste a topic's notes here (at least a few lines)…"></textarea>
+    <div class="row">
+      <select id="lang" aria-label="Language">
+        <option value="hinglish">Hinglish</option>
+        <option value="english">English</option>
+      </select>
+      <select id="count" aria-label="Number of cards">
+        <option>6</option><option selected>10</option><option>15</option><option>20</option>
+      </select>
+      <button id="make" class="primary">Make flashcards</button>
+      <button id="sample">Try sample notes</button>
+    </div>
+    <p id="msg" class="note"></p>
+  </section>
+
+  <section>
+    <h2>2. Revise <span id="due" class="note"></span></h2>
+    <div id="empty" class="note">No cards due. Make some above.</div>
+    <div id="study" hidden>
+      <div class="flash"><div id="q"></div><div id="a" class="ans" hidden></div></div>
+      <div class="row"><button id="show" class="primary">Show answer</button></div>
+      <div id="grades" class="row grades" hidden>
+        <button data-g="again">Again</button><button data-g="hard">Hard</button>
+        <button data-g="good">Good</button><button data-g="easy">Easy</button>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>3. Stuck on a concept?</h2>
+    <input id="concept" type="text" placeholder="e.g. deadlock, normalization, Ohm's law">
+    <div class="row"><button id="explain">Explain it like a friend</button></div>
+    <pre id="explainOut" class="note"></pre>
+  </section>
+
+  <p class="note">Cards live only in this browser (localStorage). <button id="reset" class="note">Clear all cards</button></p>
+</main>
+<script type="module" src="/static/js/ui.js"></script>
+</body>
+</html>
