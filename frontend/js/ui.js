@@ -43,6 +43,16 @@ function render() {
   }
 }
 
+function showDropped(dropped) {
+  $("dropped").hidden = dropped.length === 0;
+  $("droppedTitle").textContent = `${dropped.length} card${dropped.length === 1 ? "" : "s"} removed: not supported by your notes`;
+  $("droppedList").replaceChildren(...dropped.map((d) => {
+    const li = document.createElement("li");
+    li.textContent = `${d.q} → ${d.a} (${d.reason})`;   // textContent: model output is never parsed as HTML
+    return li;
+  }));
+}
+
 function say(text, warn = false) {
   $("msg").textContent = text;
   $("msg").className = "note" + (warn ? " warn" : "");
@@ -57,8 +67,10 @@ $("make").onclick = async () => {
     const r = await api.makeCards(notes, $("lang").value, +$("count").value);
     deck.addCards(r.cards);
     render();
-    if (r.source === "gemma") say(`Added ${r.cards.length} cards made by ${r.model}.`);
-    else say(`Added ${r.cards.length} cards using the simple offline rules. Connect Gemma for better, Hinglish-aware cards.`, true);
+    showDropped(r.dropped || []);
+    if (r.source !== "gemma") say(`Added ${r.cards.length} cards using the simple offline rules. Connect Gemma for better, Hinglish-aware cards.`, true);
+    else if (r.verified) say(`Added ${r.cards.length} cards by ${r.model}, each checked against your notes.`);
+    else say(`Added ${r.cards.length} cards by ${r.model}. The notes check didn't run, so read them before trusting them.`, true);
   } catch (e) {
     say(e.message, true);
   }
