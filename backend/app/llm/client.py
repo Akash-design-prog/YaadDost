@@ -19,7 +19,8 @@ def _headers() -> dict:
 
 async def status() -> dict:
     try:
-        async with httpx.AsyncClient(timeout=5, headers=_headers()) as c:
+        # a short connect timeout, so a dead address shows "Offline mode" in about 2 seconds instead of 5
+        async with httpx.AsyncClient(timeout=httpx.Timeout(5.0, connect=2.0), headers=_headers()) as c:
             r = await c.get(f"{config.OLLAMA_URL}/api/tags")
             r.raise_for_status()
             names = [m.get("name", "") for m in r.json().get("models", [])]
