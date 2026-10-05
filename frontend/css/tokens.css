@@ -1,0 +1,97 @@
+/* Design tokens. The source of truth is docs/DESIGN.md; keep the two in step. */
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("/static/fonts/bricolage-grotesque-latin.woff2") format("woff2");
+  font-weight: 500 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Sans";
+  src: url("/static/fonts/dm-sans-latin.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light;
+
+  /* colour: six roles, one accent */
+  --canvas: #f3f2ee;
+  --surface: #fbfaf7;
+  --sunk: #e9e7e0;
+  --ink: #1c1e2b;
+  --ink-soft: #565b70;
+  --accent: #3340c4;   /* indigo ink: the one action colour */
+  --accent-ink: #ffffff;
+  --accent-wash: rgb(51 64 196 / 0.08);
+  --edge: #7e7c8c;
+  --line: #dad7ce;
+  --due: #bd7400;
+  --due-text: #6f4300;
+  --due-wash: #f2e7d4;
+  --good: #1c7a4b;
+  --good-wash: #dff0e6;
+  --bad: #b3261e;
+  --bad-wash: #f7e1df;
+
+  /* type */
+  --font-display: "Bricolage Grotesque", "DM Sans", system-ui, sans-serif;
+  --font-text: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.625rem;
+  --text-2xl: 2.25rem;
+
+  /* space (4px base) */
+  --s1: 0.25rem;
+  --s2: 0.5rem;
+  --s3: 0.75rem;
+  --s4: 1rem;
+  --s6: 1.5rem;
+  --s8: 2rem;
+  --s12: 3rem;
+  --s16: 4rem;
+
+  /* radius scale: 8, 12, 16 and pill */
+  --r1: 8px;
+  --r2: 12px;
+  --r3: 16px;
+  --pill: 999px;
+
+  /* motion */
+  --t-instant: 80ms;
+  --t-fast: 140ms;
+  --t-base: 200ms;
+  --t-slow: 320ms;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
+  --lift: 0 6px 18px -8px rgb(28 30 43 / 0.28);
+}
+
+/* Dark theme: a soft dusk slate, not black. ui.js and theme-init.js set data-theme on <html> (saved choice, or the system setting). */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --canvas: #2b3047;
+  --surface: #353b56;
+  --sunk: #232739;
+  --ink: #eeecf7;
+  --ink-soft: #bcc0d6;
+  --accent: #a8b2ff;
+  --accent-ink: #12152b;
+  --accent-wash: rgb(168 178 255 / 0.14);
+  --edge: #959ab8;
+  --line: #424963;
+  --due: #f2b53f;
+  --due-text: #f6c35f;
+  --due-wash: #45402f;
+  --good: #7ae0b0;
+  --good-wash: #26443a;
+  --bad: #ffa49b;
+  --bad-wash: #503037;
+  --lift: 0 6px 18px -8px rgb(10 12 24 / 0.55);
+}

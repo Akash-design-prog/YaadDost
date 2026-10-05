@@ -3,59 +3,128 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f3f2ee">
+<script src="/static/js/theme-init.js"></script>
+<meta name="description" content="Flashcards from your own notes, checked against what you wrote, that come back just before you would forget them.">
 <title>YaadDost</title>
+<link rel="preload" href="/static/fonts/bricolage-grotesque-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/static/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/static/css/tokens.css">
 <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 <body>
-<main>
-  <header>
-    <h1>Yaad<span>Dost</span></h1>
-    <span id="badge" class="badge">checking Gemma…</span>
-  </header>
-  <p class="tag">Paste your notes. Get flashcards. Revise just before you'd forget. Your notes only ever reach your own open-weight Gemma.</p>
+<a class="skip" href="#review">Skip to your review</a>
 
-  <section>
-    <h2>1. Your notes</h2>
-    <textarea id="notes" placeholder="Paste a topic's notes here (at least a few lines)…"></textarea>
-    <div class="row">
-      <select id="lang" aria-label="Language">
-        <option value="hinglish">Hinglish</option>
-        <option value="english">English</option>
-      </select>
-      <select id="count" aria-label="Number of cards">
-        <option>6</option><option selected>10</option><option>15</option><option>20</option>
-      </select>
-      <button id="make" class="primary">Make flashcards</button>
-      <button id="sample">Try sample notes</button>
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="wordmark" href="/" aria-label="YaadDost, home">Yaad<span>Dost</span></a>
+    <div class="topbar-end">
+      <span id="badge" class="pill" role="status">Checking Gemma</span>
+      <button id="themeToggle" class="icon-btn" type="button" aria-label="Dark theme" aria-pressed="false" title="Dark theme">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      </button>
     </div>
-    <p id="msg" class="note"></p>
-    <details id="dropped" hidden>
-      <summary id="droppedTitle" class="note"></summary>
-      <ul id="droppedList" class="note"></ul>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+  <section class="today" aria-labelledby="todayTitle">
+    <h1 id="todayTitle">Today</h1>
+    <p id="dueLine" class="due-line"></p>
+    <figure id="curve" class="curve" hidden>
+      <div id="curveTrack" class="curve-track" role="img" aria-label="Review schedule"></div>
+      <div class="curve-axis" aria-hidden="true"><span>Today</span><span>7 d</span><span>14 d</span><span>30 d</span></div>
+    </figure>
+  </section>
+
+  <section id="review" class="review" aria-labelledby="reviewTitle" tabindex="-1">
+    <h2 id="reviewTitle" class="sr-only">Review</h2>
+
+    <div id="empty" class="empty" hidden>
+      <p id="emptyTitle" class="empty-title"></p>
+      <p id="emptyText" class="empty-text"></p>
+      <button id="emptyAction" class="btn secondary" type="button"></button>
+    </div>
+
+    <article id="study" class="card" hidden>
+      <p class="card-meta"><span id="mark" class="mark"></span><span id="progress" class="progress"></span></p>
+      <p id="q" class="q"></p>
+      <div id="answerBox" class="answer" tabindex="-1" hidden>
+        <p class="sr-only">Answer</p>
+        <p id="a" class="a"></p>
+      </div>
+      <div class="card-actions">
+        <button id="show" class="btn primary" type="button">Show answer <kbd>Space</kbd></button>
+        <div id="grades" class="grades" role="group" aria-label="How well did you remember it?" hidden>
+          <button class="grade" type="button" data-g="again"><span class="grade-name">Bhool gaya</span><span class="grade-sub">Again <kbd>1</kbd></span></button>
+          <button class="grade" type="button" data-g="hard"><span class="grade-name">Mushkil</span><span class="grade-sub">Hard <kbd>2</kbd></span></button>
+          <button class="grade" type="button" data-g="good"><span class="grade-name">Yaad tha</span><span class="grade-sub">Good <kbd>3</kbd></span></button>
+          <button class="grade" type="button" data-g="easy"><span class="grade-name">Aasaan</span><span class="grade-sub">Easy <kbd>4</kbd></span></button>
+        </div>
+      </div>
+    </article>
+
+    <p id="feedback" class="msg" role="status"></p>
+  </section>
+
+  <section id="notesPanel" class="panel" aria-labelledby="notesTitle">
+    <h2 id="notesTitle">Add notes</h2>
+    <p class="panel-hint">Paste what you wrote in class. Gemma turns it into cards, then checks each card against your notes.</p>
+    <form id="notesForm" novalidate>
+      <div class="field">
+        <label class="field-label" for="notes">Your notes</label>
+        <textarea id="notes" rows="8" placeholder="Deadlock: processes wait forever for resources held by each other."></textarea>
+      </div>
+      <div class="controls">
+        <div class="ctl">
+          <span class="field-label" id="langLabel">Language of the cards</span>
+          <div class="seg" role="radiogroup" aria-labelledby="langLabel">
+            <label><input type="radio" name="lang" value="hinglish" checked><span>Hinglish</span></label>
+            <label><input type="radio" name="lang" value="english"><span>English</span></label>
+          </div>
+        </div>
+        <div class="ctl">
+          <label class="field-label" for="count">Cards</label>
+          <select id="count">
+            <option value="6">6</option>
+            <option value="10" selected>10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <button id="make" class="btn primary" type="submit">Make cards</button>
+        <button id="sample" class="btn secondary" type="button">Use sample notes</button>
+      </div>
+    </form>
+    <div id="working" class="working" role="status" hidden>
+      <p id="workingText"></p>
+      <div class="bar" aria-hidden="true"><span></span></div>
+    </div>
+    <p id="msg" class="msg" role="status"></p>
+    <details id="dropped" class="dropped" hidden>
+      <summary id="droppedTitle"></summary>
+      <ul id="droppedList"></ul>
     </details>
   </section>
 
-  <section>
-    <h2>2. Revise <span id="due" class="note"></span></h2>
-    <div id="empty" class="note">No cards due. Make some above.</div>
-    <div id="study" hidden>
-      <div class="flash"><div id="q"></div><div id="a" class="ans" hidden></div></div>
-      <div class="row"><button id="show" class="primary">Show answer</button></div>
-      <div id="grades" class="row grades" hidden>
-        <button data-g="again">Again</button><button data-g="hard">Hard</button>
-        <button data-g="good">Good</button><button data-g="easy">Easy</button>
-      </div>
+  <section class="panel" aria-labelledby="explainTitle">
+    <h2 id="explainTitle">Stuck on a concept?</h2>
+    <p class="panel-hint">Name it and Gemma explains it with an everyday example, using your notes if they cover it.</p>
+    <div>
+      <label class="field-label" for="concept">Concept</label>
+      <input id="concept" type="text" maxlength="200" placeholder="deadlock, normalization, Ohm's law" autocomplete="off">
     </div>
+    <div class="row"><button id="explain" class="btn secondary" type="button">Explain it</button></div>
+    <div id="explainOut" class="note" role="status" hidden></div>
   </section>
 
-  <section>
-    <h2>3. Stuck on a concept?</h2>
-    <input id="concept" type="text" placeholder="e.g. deadlock, normalization, Ohm's law">
-    <div class="row"><button id="explain">Explain it like a friend</button></div>
-    <pre id="explainOut" class="note"></pre>
-  </section>
-
-  <p class="note">Cards live only in this browser (localStorage). <button id="reset" class="note">Clear all cards</button></p>
+  <footer class="foot">
+    <button id="reset" class="btn quiet danger" type="button">Delete all cards</button>
+    <span id="storageNote">Cards are saved in this browser only.</span>
+  </footer>
 </main>
 <script type="module" src="/static/js/ui.js"></script>
 </body>

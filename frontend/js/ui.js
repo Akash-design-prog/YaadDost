@@ -1,121 +1,119 @@
+// Bootstrap: wires the deck, the strip, the review surface, the notes panel and the explainer together.
 import * as api from "./api.js";
-import * as deck from "./deck.js";
+import { createDeck } from "./deck.js";
+import { createStrip } from "./strip.js";
+import { createReview } from "./review.js";
+import { createNotes } from "./notes.js";
+import { createTheme } from "./theme.js";
 
 const $ = (id) => document.getElementById(id);
-let current = null;
 
-const SAMPLE_NOTES = [
-  "Deadlock: a situation where two or more processes wait forever for resources held by each other.",
-  "Four conditions for deadlock: mutual exclusion, hold and wait, no preemption, and circular wait.",
-  "Banker's algorithm: avoids deadlock by granting a request only if the system stays in a safe state.",
-  "Paging divides memory into fixed-size blocks, which removes external fragmentation.",
-  "Thrashing happens when a system spends more time swapping pages than executing instructions.",
-].join("\n");
+function openStorage() {
+  try {
+    const s = window.localStorage;
+    const probe = "yaaddost.probe";
+    s.setItem(probe, "1");
+    s.removeItem(probe);
+    return s;
+  } catch {
+    return null;   // blocked (private window, strict settings): the deck lives in memory for this session
+  }
+}
 
+const storage = openStorage();
+const deck = createDeck({ storage });
+createTheme({ button: $("themeToggle"), storage });
+const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const focusNotes = () => {
+  $("notesPanel").scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
+  $("notes").focus({ preventScroll: true });
+};
+
+const strip = createStrip($("curveTrack"));
+const review = createReview({
+  deck, api, strip, reducedMotion, focusNotes,
+  els: {
+    empty: $("empty"), emptyTitle: $("emptyTitle"), emptyText: $("emptyText"), emptyAction: $("emptyAction"),
+    study: $("study"), mark: $("mark"), progress: $("progress"), q: $("q"), answerBox: $("answerBox"), a: $("a"),
+    show: $("show"), grades: $("grades"), feedback: $("feedback"), dueLine: $("dueLine"), curve: $("curve"),
+  },
+});
+createNotes({
+  deck, api,
+  onAdded: () => {
+    review.render();
+    $("review").scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
+  },
+  els: {
+    form: $("notesForm"), notes: $("notes"), count: $("count"), make: $("make"), sample: $("sample"),
+    working: $("working"), workingText: $("workingText"), msg: $("msg"),
+    dropped: $("dropped"), droppedTitle: $("droppedTitle"), droppedList: $("droppedList"),
+  },
+});
+
+// ---- Gemma status ----
 async function checkStatus() {
-  const b = $("badge");
+  const badge = $("badge");
   try {
     const s = await api.getStatus();
-    b.textContent = s.available ? "Gemma connected · " + s.model : "Offline mode · Gemma not reachable";
-    b.className = "badge " + (s.available ? "ok" : "off");
+    badge.textContent = s.available ? `Gemma connected · ${s.model}` : "Offline mode";
+    badge.className = `pill ${s.available ? "is-on" : "is-off"}`;
+    badge.title = s.available ? "Cards are written and checked by your Gemma server." : "Gemma isn't reachable, so cards are made with simple rules.";
   } catch {
-    b.textContent = "Offline mode";
-    b.className = "badge off";
+    badge.textContent = "Offline mode";
+    badge.className = "pill is-off";
   }
 }
 
-function render() {
-  const due = deck.due();
-  $("due").textContent = deck.size() ? `· ${due.length} due of ${deck.size()}` : "";
-  current = due[0] || null;
-  $("empty").hidden = !!current;
-  $("study").hidden = !current;
-  if (current) {
-    $("q").textContent = current.q;
-    $("a").textContent = current.a;
-    $("a").hidden = true;
-    $("grades").hidden = true;
-    $("show").hidden = false;
-  } else {
-    $("empty").textContent = deck.size()
-      ? "All caught up. Come back when the next card is due."
-      : "No cards due. Make some above.";
-  }
-}
-
-function showDropped(dropped) {
-  $("dropped").hidden = dropped.length === 0;
-  $("droppedTitle").textContent = `${dropped.length} card${dropped.length === 1 ? "" : "s"} removed: not supported by your notes`;
-  $("droppedList").replaceChildren(...dropped.map((d) => {
-    const li = document.createElement("li");
-    li.textContent = `${d.q} → ${d.a} (${d.reason})`;   // textContent: model output is never parsed as HTML
-    return li;
-  }));
-}
-
-function say(text, warn = false) {
-  $("msg").textContent = text;
-  $("msg").className = "note" + (warn ? " warn" : "");
-}
-
-$("make").onclick = async () => {
-  const notes = $("notes").value.trim();
-  if (notes.length < 20) return say("Add a few more lines of notes first.", true);
-  $("make").disabled = true;
-  say("Making cards… (the first call can take a minute)");
-  try {
-    const r = await api.makeCards(notes, $("lang").value, +$("count").value);
-    deck.addCards(r.cards);
-    render();
-    showDropped(r.dropped || []);
-    if (r.source !== "gemma") say(`Added ${r.cards.length} cards using the simple offline rules. Connect Gemma for better, Hinglish-aware cards.`, true);
-    else if (r.verified) say(`Added ${r.cards.length} cards by ${r.model}, each checked against your notes.`);
-    else say(`Added ${r.cards.length} cards by ${r.model}. The notes check didn't run, so read them before trusting them.`, true);
-  } catch (e) {
-    say(e.message, true);
-  }
-  $("make").disabled = false;
-};
-
-$("show").onclick = () => {
-  $("a").hidden = false;
-  $("grades").hidden = false;
-  $("show").hidden = true;
-};
-
-$("grades").onclick = async (e) => {
-  const grade = e.target.dataset.g;
-  if (!grade || !current) return;
-  try {
-    deck.applyReview(current, grade, await api.reviewCard(current, grade));
-    render();
-  } catch (err) {
-    say(err.message, true);
-  }
-};
-
-$("explain").onclick = async () => {
+// ---- explain a concept ----
+$("explain").addEventListener("click", async () => {
   const concept = $("concept").value.trim();
-  if (concept.length < 2) return;
+  const out = $("explainOut");
+  if (concept.length < 2) {
+    out.hidden = false;
+    out.className = "note is-error";
+    out.textContent = "Type the concept you want explained.";
+    $("concept").focus();
+    return;
+  }
   $("explain").disabled = true;
-  $("explainOut").textContent = "Thinking…";
+  out.hidden = false;
+  out.className = "note";
+  out.textContent = "Thinking about it…";
   try {
-    $("explainOut").textContent = (await api.explain(concept, $("notes").value, $("lang").value)).text;
+    const language = document.querySelector('input[name="lang"]:checked').value;
+    out.textContent = (await api.explain(concept, $("notes").value, language)).text;
   } catch (e) {
-    $("explainOut").textContent = e.message;
+    out.className = "note is-error";
+    out.textContent = e.message;
+  } finally {
+    $("explain").disabled = false;
   }
-  $("explain").disabled = false;
-};
+});
 
-$("reset").onclick = () => {
-  if (confirm("Delete all saved cards?")) {
+// ---- delete everything ----
+$("reset").addEventListener("click", () => {
+  const n = deck.size();
+  if (n === 0) return;
+  if (window.confirm(`Delete all ${n} ${n === 1 ? "card" : "cards"}? This can't be undone.`)) {
     deck.clear();
-    render();
+    review.render();
   }
-};
+});
 
-$("sample").onclick = () => { $("notes").value = SAMPLE_NOTES; };
+// ---- keyboard ----
+document.addEventListener("keydown", (e) => {
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  const tag = e.target.tagName;
+  if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || e.target.isContentEditable) return;
+  if (tag === "BUTTON" && (e.key === " " || e.key === "Enter")) return;   // let the focused button handle it
+  if (review.onKey(e)) e.preventDefault();
+});
+
+if (!deck.isPersistent()) {
+  $("storageNote").textContent = "This browser is blocking storage, so your cards won't be saved after you close this tab.";
+}
 
 checkStatus();
-render();
-setInterval(render, 60000);
+review.render();
+setInterval(review.render, 30000);   // cards come due while the page is open

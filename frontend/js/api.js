@@ -3,9 +3,14 @@ async function request(path, body) {
   const init = body
     ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }
     : undefined;
-  const r = await fetch(path, init);
+  let r;
+  try {
+    r = await fetch(path, init);
+  } catch {
+    throw new Error("Can't reach the server. Check your connection and try again.");
+  }
   const data = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error(typeof data.detail === "string" ? data.detail : "Something went wrong (" + r.status + ")");
+  if (!r.ok) throw new Error(typeof data.detail === "string" ? data.detail : `The server had a problem (${r.status}). Try again in a moment.`);
   return data;
 }
 
