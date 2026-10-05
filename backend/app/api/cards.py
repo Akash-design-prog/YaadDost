@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 
 from app.core import config
+from app.core.ratelimit import rate_limit
 from app.agents import pipeline
 from app.llm.client import LLMUnavailable
 from app.services import fallback
@@ -10,7 +11,7 @@ from .schemas import CardsIn
 router = APIRouter()
 
 
-@router.post("/cards")
+@router.post("/cards", dependencies=[Depends(rate_limit)])
 async def cards(body: CardsIn):
     try:
         out = await pipeline.make_verified_cards(body.notes, body.count, body.language)
