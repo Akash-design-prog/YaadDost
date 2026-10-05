@@ -1,6 +1,7 @@
 """SM-2 spaced repetition. Pure functions: the browser keeps the state, the server does the math."""
 
 MIN_EASE = 1.3
+MAX_INTERVAL = 365   # days. Without a cap, repeated "easy" reviews grow the interval without bound.
 
 # Button -> SM-2 quality (0-5)
 GRADES = {"again": 1, "hard": 3, "good": 4, "easy": 5}
@@ -25,7 +26,7 @@ def review(ease: float, interval: int, reps: int, grade: str) -> dict:
         elif reps == 2:
             interval = 6
         else:
-            interval = max(1, round(interval * ease))
+            interval = min(MAX_INTERVAL, max(1, round(interval * ease)))
 
     ease = max(MIN_EASE, ease + 0.1 - (5 - q) * (0.08 + (5 - q) * 0.02))
     return {"ease": round(ease, 3), "interval": interval, "reps": reps}

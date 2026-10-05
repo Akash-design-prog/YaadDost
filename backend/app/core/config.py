@@ -7,3 +7,5 @@ MODEL = os.environ.get("GEMMA_MODEL", "gemma4:e4b")
 LLM_TIMEOUT = float(os.environ.get("LLM_TIMEOUT", "120"))
 
 MAX_NOTES = 8000
+# Requests per minute per visitor for the endpoints that call Gemma. 0 turns the limit off.
+RATE_LIMIT_PER_MIN = int(os.environ.get("RATE_LIMIT_PER_MIN", "10"))

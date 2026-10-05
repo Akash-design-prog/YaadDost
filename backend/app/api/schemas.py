@@ -20,7 +20,8 @@ class ExplainIn(BaseModel):
 
 
 class ReviewIn(BaseModel):
-    ease: float = 2.5
-    interval: int = 0
-    reps: int = 0
+    # Bounds keep nonsense (NaN, negative or astronomically large values) out of the scheduler.
+    ease: float = Field(default=2.5, ge=1.3, le=10)
+    interval: int = Field(default=0, ge=0, le=36500)
+    reps: int = Field(default=0, ge=0, le=1000)
     grade: Literal["again", "hard", "good", "easy"]
