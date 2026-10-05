@@ -1,0 +1,102 @@
+server: http://localhost:11434
+model : gemma4:e4b  (available: True)
+
+=== dbms_normalization.txt  (15.5s)  {'cards': 7, 'ungrounded': None, 'duplicates': 0, 'mean_groundedness': None, 'hinglish_cards': 7}
+  Q: Normalization kya process hai?
+  A: Yeh database ko organize karne ka process hai taaki redundancy kam ho aur update anomalies avoid ho sakein.
+
+  Q: 1NF mein kya conditions honi chahiye?
+  A: Har column mein atomic values honi chahiye aur koi repeating groups nahi hone chahiye.
+
+  Q: 2NF ki requirement kya hai?
+  A: Table 1NF mein honi chahiye aur koi non-key column composite primary key ke sirf part par depend nahi hona chahiye.
+
+  Q: 3NF mein kya condition check karte hain?
+  A: Table 2NF mein honi chahiye aur koi non-key column kisi doosre non-key column par depend nahi hona chahiye (no transitive dependency).
+
+  Q: BCNF, 3NF se kaise alag hai?
+  A: BCNF, 3NF se zyada strict hai, jahan har functional dependency X -> Y mein X ek superkey hona chahiye.
+
+  Q: Primary key ka kya function hota hai?
+  A: Primary key har row ko uniquely identify karta hai aur woh NULL nahi ho sakta.
+
+  Q: Foreign key kya kaam karta hai?
+  A: Foreign key ek table ke column ko doosre table ke primary key se link karta hai.
+
+
+=== messy_hinglish_notes.txt  (19.1s)  {'cards': 8, 'ungrounded': None, 'duplicates': 0, 'mean_groundedness': None, 'hinglish_cards': 8}
+  Q: TCP reliable kyun hota hai aur uski handshake process kya hoti hai?
+  A: TCP reliable hota hai aur woh 3-way handshake (syn, syn-ack, ack) karta hai.
+
+  Q: UDP ki kya khaasiyat hai aur usme delivery guarantee hoti hai kya?
+  A: UDP fast hota hai, lekin usme delivery ki guarantee nahi hoti.
+
+  Q: TCP mein kaun kaun se controls hote hain?
+  A: TCP mein flow control aur congestion control hota hai.
+
+  Q: DNS ka kya kaam hai aur woh kis port par chalta hai?
+  A: DNS domain name ko IP address mein convert karta hai aur woh port 53 par chalta hai.
+
+  Q: HTTP aur HTTPS kis kis port par run karte hain?
+  A: HTTP port 80 par aur HTTPS port 443 par (TLS encryption ke saath) run karta hai.
+
+  Q: OSI model mein total kitni layers hoti hain?
+  A: OSI model mein total 7 layers hoti hain.
+
+  Q: Router aur Switch kis kis layer par kaam karte hain?
+  A: Router network layer par kaam karta hai aur switch data link layer par kaam karta hai.
+
+  Q: IPv4 aur IPv6 mein IP address ki bit size kitni hoti hai?
+  A: IPv4 mein IP address 32 bit ka hota hai aur IPv6 mein 128 bit ka hota hai.
+
+
+=== os_deadlock.txt  (18.8s)  {'cards': 8, 'ungrounded': None, 'duplicates': 0, 'mean_groundedness': None, 'hinglish_cards': 8}
+  Q: Deadlock kya hota hai?
+  A: Yeh ek situation hai jahan do ya zyada processes ek doosre ke resources ke liye hamesha wait karte hain.
+
+  Q: Deadlock ke four conditions kya hain?
+  A: Woh hain mutual exclusion, hold and wait, no preemption, aur circular wait.
+
+  Q: Deadlock hone ke liye kya zaroori hai?
+  A: Deadlock ke liye in charon conditions ka ek saath hold hona zaroori hai.
+
+  Q: Banker's algorithm deadlock se kaise bachata hai?
+  A: Yeh request tabhi grant karta hai jab system safe state mein rehta hai.
+
+  Q: Safe state ka kya matlab hai?
+  A: Iska matlab hai ki ek aisa order hai jismein har process available resources se finish ho sakta hai.
+
+  Q: Paging memory ko kaise divide karta hai aur kya remove karta hai?
+  A: Paging memory ko fixed-size blocks mein divide karta hai, jo external fragmentation ko remove karta hai.
+
+  Q: Thrashing kab hota hai?
+  A: Thrashing tab hota hai jab system instructions execute karne se zyada time pages swap karne mein spend karta hai.
+
+  Q: Round robin scheduling kaise kaam karta hai?
+  A: Yeh har process ko ek fixed time quantum deta hai aur use queue ke peeche bhej deta hai.
+
+
+=== physics_electricity.txt  (18.7s)  {'cards': 7, 'ungrounded': None, 'duplicates': 0, 'mean_groundedness': None, 'hinglish_cards': 7}
+  Q: Ohm's law ka formula kya hai?
+  A: V = I x R.
+
+  Q: Resistors series mein connect hone par total resistance kaise calculate karte hain?
+  A: Total resistance individual resistances ka sum hoti hai, R = R1 + R2 + R3.
+
+  Q: Resistors parallel mein connect hone par total resistance ka reciprocal kaise nikalte hain?
+  A: Total resistance ka reciprocal, individual reciprocals ka sum hota hai, 1/R = 1/R1 + 1/R2.
+
+  Q: Electric power (P) ka formula kya hai?
+  A: Electric power P = V x I hota hai.
+
+  Q: Power ka SI unit kya hai?
+  A: Power ka SI unit watt hota hai.
+
+  Q: Ek kilowatt-hour kitni energy use karta hai?
+  A: Yeh 1000 W appliance dwara ek ghante tak chalane par use ki gayi energy hai.
+
+  Q: Kirchhoff's current law kya kehta hai?
+  A: Junction mein entering total current, leaving total current ke barabar hota hai.
+
+
+saved /content/yaaddost/evals/results/hinglish.json

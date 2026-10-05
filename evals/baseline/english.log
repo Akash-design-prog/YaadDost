@@ -1,0 +1,99 @@
+server: http://localhost:11434
+model : gemma4:e4b  (available: True)
+
+=== dbms_normalization.txt  (15.2s)  {'cards': 7, 'ungrounded': 0, 'duplicates': 0, 'mean_groundedness': 0.986, 'hinglish_cards': None}
+  Q: What is the process of normalization in a database?
+  A: Normalization is the process of organising a database to reduce redundancy and avoid update anomalies.
+
+  Q: What conditions must be met for a table to be in 1NF?
+  A: Every column must hold atomic values and there must be no repeating groups.
+
+  Q: What is the requirement for a table to be in 2NF?
+  A: The table must be in 1NF and no non-key column depends on only part of a composite primary key.
+
+  Q: What is the requirement for a table to be in 3NF?
+  A: The table must be in 2NF and no non-key column depends on another non-key column.
+
+  Q: What is the defining condition of BCNF?
+  A: For every functional dependency X -> Y, X must be a superkey.
+
+  Q: What are the properties of a primary key?
+  A: A primary key uniquely identifies each row and cannot be NULL.
+
+  Q: How does a foreign key link tables in a database?
+  A: A foreign key links a column in one table to the primary key of another table.
+
+
+=== messy_hinglish_notes.txt  (16.1s)  {'cards': 8, 'ungrounded': 2, 'duplicates': 0, 'mean_groundedness': 0.681, 'hinglish_cards': None}
+  Q: What characteristic defines TCP?
+  A: TCP is reliable.
+
+  Q: What is the TCP handshake process?
+  A: It is a three-way handshake involving SYN, SYN-ACK, and ACK.
+
+  Q: What is the main trade-off of UDP?
+  A: UDP is fast but does not guarantee delivery.
+
+  Q: What controls does TCP possess?
+  A: TCP has flow control and congestion control.
+
+  Q: What does DNS convert?
+  A: DNS converts domain names into IP addresses.
+
+  Q: How many layers are in the OSI model?
+  A: The OSI model has seven layers.
+
+  Q: At which layer does a router operate?
+  A: A router works at the network layer.
+
+  Q: How many bits are in an IPv6 address?
+  A: An IPv6 address is 128 bits.
+
+
+=== os_deadlock.txt  (13.3s)  {'cards': 7, 'ungrounded': 0, 'duplicates': 0, 'mean_groundedness': 1.0, 'hinglish_cards': None}
+  Q: What is deadlock?
+  A: Deadlock is a situation where two or more processes wait forever for resources held by each other.
+
+  Q: What are the four conditions required for deadlock?
+  A: The four conditions are mutual exclusion, hold and wait, no preemption, and circular wait.
+
+  Q: How does the Banker's algorithm avoid deadlock?
+  A: It avoids deadlock by granting a request only if the system stays in a safe state.
+
+  Q: What does a safe state mean?
+  A: A safe state means there is an order in which every process can finish with the resources available.
+
+  Q: What is the function of paging regarding memory fragmentation?
+  A: Paging divides memory into fixed-size blocks, which removes external fragmentation.
+
+  Q: What is thrashing?
+  A: Thrashing happens when a system spends more time swapping pages than executing instructions.
+
+  Q: How does round robin scheduling operate?
+  A: It gives each process a fixed time quantum and moves it to the back of the queue.
+
+
+=== physics_electricity.txt  (14.3s)  {'cards': 7, 'ungrounded': 0, 'duplicates': 0, 'mean_groundedness': 1.0, 'hinglish_cards': None}
+  Q: What is the formula for Ohm's law?
+  A: V = I x R
+
+  Q: How is the total resistance calculated for resistors in series?
+  A: The total resistance is the sum of the individual resistances (R = R1 + R2 + R3).
+
+  Q: How is the total resistance calculated for resistors in parallel?
+  A: The reciprocal of the total resistance is the sum of the reciprocals (1/R = 1/R1 + 1/R2).
+
+  Q: What is the formula for electric power?
+  A: P = V x I
+
+  Q: What is the SI unit of power?
+  A: The SI unit of power is the watt.
+
+  Q: What energy usage does one kilowatt-hour represent?
+  A: It is the energy used by a 1000 W appliance running for one hour.
+
+  Q: What does Kirchhoff's current law state?
+  A: The total current entering a junction equals the total current leaving it.
+
+
+saved /content/yaaddost/evals/results/english.json

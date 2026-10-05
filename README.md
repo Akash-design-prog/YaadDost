@@ -29,6 +29,15 @@ revise each card. Your notes only ever reach a Gemma server that you run yoursel
 - **Privacy:** cards are stored in your browser (localStorage). Notes go only to the Gemma server you point
   `OLLAMA_URL` at.
 
+## The interface
+
+YaadDost is a "live surface": the app is the product from the first screen, with no marketing page in front of it.
+Its signature feature is the **forgetting-curve strip**: one dot per card on the day it is due, drawn from the real
+SM-2 schedule, and a card's dot hops to its new day when you grade it. Grades are Hinglish (Bhool gaya, Mushkil,
+Yaad tha, Aasaan) and work from the keyboard (Space shows the answer, 1 to 4 grades). It has a light and a dark
+theme, works from 320px wide up, respects reduced-motion settings, and loads no third-party resources.
+The rules behind every choice (colours, type, spacing, motion, copy) are in [docs/DESIGN.md](docs/DESIGN.md).
+
 ## Why open models
 
 The notes are a student's private material, and the app is meant to be free to use daily. A local open-weight
@@ -70,8 +79,18 @@ Set `OLLAMA_URL` (and optionally `GEMMA_MODEL`) in the environment. `deploy/rend
 ## Tests and evaluation
 
 ```bash
-pytest                      # unit tests, no model needed
+pytest                      # all tests, no model needed
+python -m playwright install chromium   # once, for the browser tests in tests/e2e (they skip without it)
 ```
+
+- `tests/unit/`: scheduler, prompts, Gemma client, agents, API, rate limit, security checks, failure cases, and
+  property-based tests (Hypothesis tries hundreds of generated inputs). It also runs the JavaScript tests.
+- `tests/js/`: the frontend's pure logic (the schedule maths behind the strip, and the deck store including corrupt and
+  blocked storage), using Node's built-in test runner (Node 22 or newer).
+- `tests/e2e/`: the real page in a real browser (Chromium via Playwright): the whole student flow with mouse and
+  keyboard, reloads, the Verifier's removed-cards list, a slow or unreachable Gemma, blocked storage, every colour pair's
+  measured contrast in both themes, 44px touch targets, widths from 320px up, reduced motion, accessible names,
+  self-hosted fonts with no third-party requests, and a check that model text is never rendered as HTML.
 
 The tests use a fake model server, so they check our code, not Gemma's quality. Quality is measured separately,
 against a real Gemma, with `colab/eval_on_colab.ipynb`:
@@ -95,7 +114,13 @@ backend/app/
   services/   srs.py (SM-2), fallback.py (offline cards)
   core/       settings
 frontend/     plain HTML, CSS and JS modules, no build step
-tests/unit/   unit tests
+  css/        tokens.css (design tokens), styles.css
+  js/         schedule.js and deck.js (pure logic), strip.js, review.js, notes.js, ui.js, api.js
+  fonts/      the two self-hosted fonts (Open Font License)
+docs/         DESIGN.md (the design system), EVAL.md (evaluation results)
+tests/unit/   unit, property, security and failure tests (Python)
+tests/js/     unit tests for the frontend logic (Node's built-in runner)
+tests/e2e/    the real page in a real browser
 evals/        real-Gemma evaluation scripts and sample notes
 colab/        notebooks: Gemma server, and the evaluation
 deploy/       Render blueprint

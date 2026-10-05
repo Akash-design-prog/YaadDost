@@ -1,0 +1,82 @@
+server: http://localhost:11434  model: gemma4:e4b  available: True
+
+--- run 1
+  [ok] expect=keep  What is a deadlock? -> Processes wait forever for resources held by each other.  (verbatim)
+        verifier: The notes state that deadlock is a situation where processes wait forever for resources held by each other.
+  [ok] expect=keep  How many conditions must hold for deadlock? -> All four conditions must hold together.  (paraphrase)
+        verifier: The notes state that all four conditions must hold together for deadlock.
+  [ok] expect=keep  How does the Banker's algorithm avoid deadlock? -> Yeh request tabhi grant karta hai jab system safe state mein rehta hai.  (Hinglish translation of notes)
+        verifier: The notes state that the Banker's algorithm avoids deadlock by granting a request only if the system stays in a safe state.
+  [ok] expect=keep  TCP aur UDP mein delivery ki guarantee kiski hoti hai? -> TCP reliable hai, UDP mein delivery ki guarantee nahi hoti.  (Hinglish from Hinglish notes)
+        verifier: The notes state that TCP is reliable and UDP does not guarantee delivery.
+  [ok] expect=keep  Which port does HTTPS use? -> Port 443.  (short factual)
+        verifier: The notes explicitly state that HTTPS uses port 443.
+  [ok] expect=keep  What does paging remove? -> External fragmentation.  (short)
+        verifier: The notes state that paging removes external fragmentation.
+  [ok] expect=drop  Which port does HTTPS use? -> Port 8080.  (wrong number)
+        verifier: The notes state that HTTPS uses port 443, not port 8080.
+  [ok] expect=drop  How many conditions are needed for deadlock? -> Any one of the four conditions is enough.  (contradicts notes)
+        verifier: The notes state that all four conditions must hold together, not that any one is enough.
+  [ok] expect=drop  Who invented the Banker's algorithm? -> Edsger Dijkstra.  (true in the real world but not in the notes)
+        verifier: The notes do not mention who invented the Banker's algorithm.
+  [ok] expect=drop  What causes thrashing? -> Too many processes running on a single CPU core.  (invented explanation)
+        verifier: The notes define thrashing as spending more time swapping pages than executing instructions, not due to too many processes on a single CPU core.
+  [ok] expect=drop  What does paging cause? -> Paging creates external fragmentation.  (reversed meaning)
+        verifier: The notes state that paging removes external fragmentation, it does not cause it.
+  [ok] expect=drop  What is the time quantum in round robin? -> A fixed slice of CPU time per process.  (topic not in the notes)
+        verifier: The notes do not contain any information about round robin or time quantum.
+  false accepts: 0   false rejects: 0   no verdict: 0   of 12
+
+--- run 2
+  [ok] expect=keep  What is a deadlock? -> Processes wait forever for resources held by each other.  (verbatim)
+        verifier: The notes state that deadlock is a situation where processes wait forever for resources held by each other.
+  [ok] expect=keep  How many conditions must hold for deadlock? -> All four conditions must hold together.  (paraphrase)
+        verifier: The notes state that all four conditions must hold together for deadlock.
+  [ok] expect=keep  How does the Banker's algorithm avoid deadlock? -> Yeh request tabhi grant karta hai jab system safe state mein rehta hai.  (Hinglish translation of notes)
+        verifier: The notes state that Banker's algorithm avoids deadlock by granting a request only if the system stays in a safe state.
+  [ok] expect=keep  TCP aur UDP mein delivery ki guarantee kiski hoti hai? -> TCP reliable hai, UDP mein delivery ki guarantee nahi hoti.  (Hinglish from Hinglish notes)
+        verifier: The notes state that TCP is reliable and UDP does not guarantee delivery.
+  [ok] expect=keep  Which port does HTTPS use? -> Port 443.  (short factual)
+        verifier: The notes state that HTTPS uses port 443.
+  [ok] expect=keep  What does paging remove? -> External fragmentation.  (short)
+        verifier: The notes state that paging removes external fragmentation.
+  [ok] expect=drop  Which port does HTTPS use? -> Port 8080.  (wrong number)
+        verifier: The notes state that HTTPS uses port 443, not port 8080.
+  [ok] expect=drop  How many conditions are needed for deadlock? -> Any one of the four conditions is enough.  (contradicts notes)
+        verifier: The notes state that all four conditions must hold together, not just one.
+  [ok] expect=drop  Who invented the Banker's algorithm? -> Edsger Dijkstra.  (true in the real world but not in the notes)
+        verifier: The notes do not mention who invented the Banker's algorithm.
+  [ok] expect=drop  What causes thrashing? -> Too many processes running on a single CPU core.  (invented explanation)
+        verifier: The notes state that thrashing happens when a system spends more time swapping pages than executing instructions.
+  [ok] expect=drop  What does paging cause? -> Paging creates external fragmentation.  (reversed meaning)
+        verifier: The notes state that paging removes external fragmentation, not causes it.
+  [ok] expect=drop  What is the time quantum in round robin? -> A fixed slice of CPU time per process.  (topic not in the notes)
+        verifier: The notes do not contain any information about Round Robin or time quantum.
+  false accepts: 0   false rejects: 0   no verdict: 0   of 12
+
+--- run 3
+  [ok] expect=keep  What is a deadlock? -> Processes wait forever for resources held by each other.  (verbatim)
+        verifier: The notes define deadlock as processes waiting forever for resources held by each other.
+  [ok] expect=keep  How many conditions must hold for deadlock? -> All four conditions must hold together.  (paraphrase)
+        verifier: The notes state that all four conditions must hold together for deadlock.
+  [ok] expect=keep  How does the Banker's algorithm avoid deadlock? -> Yeh request tabhi grant karta hai jab system safe state mein rehta hai.  (Hinglish translation of notes)
+        verifier: The notes state that the Banker's algorithm grants a request only if the system stays in a safe state.
+  [ok] expect=keep  TCP aur UDP mein delivery ki guarantee kiski hoti hai? -> TCP reliable hai, UDP mein delivery ki guarantee nahi hoti.  (Hinglish from Hinglish notes)
+        verifier: The notes state that TCP is reliable and UDP does not have delivery guarantee.
+  [ok] expect=keep  Which port does HTTPS use? -> Port 443.  (short factual)
+        verifier: The notes specify that HTTPS uses port 443.
+  [ok] expect=keep  What does paging remove? -> External fragmentation.  (short)
+        verifier: The notes state that paging removes external fragmentation.
+  [ok] expect=drop  Which port does HTTPS use? -> Port 8080.  (wrong number)
+        verifier: The notes state that HTTPS uses port 443, not port 8080.
+  [ok] expect=drop  How many conditions are needed for deadlock? -> Any one of the four conditions is enough.  (contradicts notes)
+        verifier: The notes state that all four conditions must hold together, not just one.
+  [ok] expect=drop  Who invented the Banker's algorithm? -> Edsger Dijkstra.  (true in the real world but not in the notes)
+        verifier: The notes do not mention who invented the Banker's algorithm.
+  [ok] expect=drop  What causes thrashing? -> Too many processes running on a single CPU core.  (invented explanation)
+        verifier: The notes state that thrashing occurs when a system spends more time swapping pages than executing instructions.
+  [ok] expect=drop  What does paging cause? -> Paging creates external fragmentation.  (reversed meaning)
+        verifier: The notes state that paging removes external fragmentation, it does not cause it.
+  [ok] expect=drop  What is the time quantum in round robin? -> A fixed slice of CPU time per process.  (topic not in the notes)
+        verifier: The notes do not contain information about round robin or time quantum.
+  false accepts: 0   false rejects: 0   no verdict: 0   of 12
