@@ -74,5 +74,8 @@ def test_healthz_does_not_need_gemma(monkeypatch):
 
 def test_frontend_files_served():
     assert "YaadDost" in client.get("/").text
-    for path in ("css/styles.css", "js/api.js", "js/deck.js", "js/ui.js"):
+    for path in (
+        "css/tokens.css", "css/styles.css", "js/api.js", "js/deck.js", "js/schedule.js", "js/strip.js", "js/review.js",
+        "js/notes.js", "js/theme.js", "js/theme-init.js", "js/ui.js", "fonts/bricolage-grotesque-latin.woff2", "fonts/dm-sans-latin.woff2",
+    ):
         assert client.get(f"/static/{path}").status_code == 200, path

@@ -20,6 +20,13 @@ def test_again_resets_and_floors_ease():
     assert s["reps"] == 0 and s["interval"] == 1 and s["ease"] == srs.MIN_EASE
 
 
+def test_interval_is_capped_at_a_year():
+    s = srs.review(3.0, 300, 9, "easy")
+    assert s["interval"] == srs.MAX_INTERVAL == 365
+    # and a capped card stays reviewable: the API accepts the state it just produced
+    assert srs.review(s["ease"], s["interval"], s["reps"], "good")["interval"] == 365
+
+
 def test_rejects_unknown_grade():
     with pytest.raises(ValueError):
         srs.review(2.5, 0, 0, "meh")
